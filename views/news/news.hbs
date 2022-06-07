@@ -1,0 +1,164 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+<style>
+    * {
+        margin: auto;
+        padding: 0;
+    }
+
+    body {
+        padding: 0;
+    }
+</style>
+<nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
+                aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse text-center align-items-center align-content-center" id="navbarScroll">
+            <h1 class="navbar-brand mb-0 h1">
+                <a href="/news">
+                    <img src="https://ap.poly.edu.vn/images/logo.png" alt="logo" style="width: 200px;">
+                </a>
+            </h1>
+            <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                <li class="nav-item">
+                    <a class="nav-link" href="/users">Người dùng</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Tin tức</a>
+                </li>
+            </ul>
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+                <a href="/logout" class="btn btn-outline-dark my-1 mx-1">
+                    Logout
+                </a>
+            </form>
+        </div>
+    </div>
+</nav>
+<div>
+    <div class="container">
+        <div class="row" style="margin: auto;">
+            <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addNews"
+            >
+                Thêm tin tức
+            </button>
+        </div>
+        <div class="row" style="padding: 0;">
+
+            {{#each news}}
+                <div class="card col-12 col-md-4 col-lg-3 col-xl-3"
+                     style="float: left; margin: auto; padding: 0; margin: 5px">
+                    <a href="/news/id/{{_id}}"
+                       style="padding-right: 0; padding-left: 0; text-decoration: none">
+                        <div class="card-header">
+                            <h6> {{ title }} </h6>
+                        </div>
+                        <div class="card-body">
+                            <img src="https://ap.poly.edu.vn/images/logo.png" alt="{{image}}"
+                                 style="width: 100%; height: 90%">
+                        </div>
+                    </a>
+                    <div class="card-footer"
+                         style="justify-content: center; justify-items: center;align-content: center;align-items: center; text-align: center; width: 100%;">
+                        <button class="btn btn-outline-success" data-bs-toggle="modal"
+                                data-bs-target="#exampleModal{{_id}}">
+                            Sửa tin tức
+                        </button>
+                        <a href="news/delete/{{_id}}" class="btn btn-outline-success">
+                            Xóa tin tức
+                        </a>
+                    </div>
+                </div>
+                <div class="modal fade" id="exampleModal{{_id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <form action="news/edit/{{_id}}" method="post">
+                            <div class="modal-content" style="display: block">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="title">Tiêu đề</label>
+                                        <input type="text" class="form-control" id="title"
+                                               aria-describedby="emailHelp"
+                                               placeholder="Tiêu đề" name="title" value="{{title}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="content">Nội dung</label>
+                                        <textarea class="form-control" id="content"
+                                                  placeholder="Mô tả" name="content">{{content}}</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="image">Ảnh</label>
+                                        <input type="text" class="form-control" id="image"
+                                               placeholder="Ảnh" name="image" value="{{image}}">
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                                    </button>
+                                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save
+                                        changes
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            {{/each}}
+            <div class="modal fade" id="addNews" tabindex="-1" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <form action="news/" method="post">
+                        <div class="modal-content" style="display: block">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="title">Tiêu đề</label>
+                                    <input type="text" class="form-control" id="title"
+                                           aria-describedby="emailHelp"
+                                           placeholder="Tiêu đề" name="title" value="{{title}}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="content">Nội dung</label>
+                                    <textarea class="form-control" id="content"
+                                              placeholder="Mô tả" name="content">{{content}}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="image">Ảnh</label>
+                                    <input type="text" class="form-control" id="image"
+                                           placeholder="Ảnh" name="image" value="{{image}}">
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                                </button>
+                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save
+                                    changes
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

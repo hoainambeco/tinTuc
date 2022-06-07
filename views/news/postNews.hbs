@@ -1,0 +1,150 @@
+<link href="public/stylesheets/bootstrap.min.css">
+<style>
+    * {
+        margin: auto;
+        padding: 0;
+    }
+
+    body {
+        padding: 0;
+        background: rgb(248, 249, 250);
+    }
+</style>
+<script>
+    function deleteComment(id) {
+        console.log(id);
+        document.getElementById('deleteComment').value(id);
+    }
+</script>
+<nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
+                aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse text-center align-items-center align-content-center" id="navbarScroll">
+            <h1 class="navbar-brand mb-0 h1">
+                <a href="/news">
+                    <img src="https://ap.poly.edu.vn/images/logo.png" alt="logo" style="width: 200px;">
+                </a>
+            </h1>
+            <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+                <li class="nav-item">
+                    <a class="nav-link" href="/users">Người dùng</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Tin tức</a>
+                </li>
+            </ul>
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+                <a href="/logout" class="btn btn-outline-dark my-1 mx-1">
+                    Logout
+                </a>
+            </form>
+        </div>
+    </div>
+</nav>
+<div class="container text-center"
+     style="background: #fefefe; min-height: 800px; border-radius: 20px; padding-bottom: 50px">
+    <div style="padding: 0;">
+        {{#if news}}
+            <div class="col-12 col-md-12 col-lg-12 col-xl-12"
+                 style="padding-right: 0; padding-left: 0; text-decoration: none">
+                <img src="{{news.image}}" alt="img" style="width: 500px;">
+                <h5 class="card-title">{{news.title}}</h5>
+                <p class="card-text">{{news.content}}</p>
+            </div>
+        {{/if}}
+    </div>
+</div>
+<div>
+    <div class="container" style="background: #fefefe;border-radius: 20px; margin-top: 10px">
+        <h1>Bình luận</h1>
+        <div class="row">
+            {{#each comments}}
+                <div class="col-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="card-deck">
+                        <div class="card mt-3" style="border-radius: unset;border: unset;display: block">
+                            <div class="card-body" style="border-radius: 20px; border: 1px black solid">
+                                <button
+                                        type="button"
+                                        class="btn-close float-end"
+                                        aria-label="Close"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal{{_id}}"></button>
+                                <input type="hidden" name="idComment" value="{{_id}}"/>
+                                <h5 class="card-title">{{fullNameUser}}</h5>
+                                <p style="font-size: 13px; color: #9a9999">{{Email}}</p>
+                                <p class="card-text">{{content}}</p>
+                                <p>{{date}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{#if modelDeleteComment}}
+                    <div class="modal fade" id="exampleModal{{_id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content" style="display: block">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Xóa bình luận</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Bình luận xóa đi sẽ không thể khôi phục lại được. Bạn vẫn muốn xóa chứ
+                                </div>
+                                <div class="modal-footer">
+                                    <form action="/news/deleteComment" method="post">
+                                        <input type="hidden" name="deleteIdComment" id="deleteIdComment" value="{{_id}}"/>
+                                        <input type="hidden" name="deleteIdNews" value="{{idNews}}"/>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                        <button type="submit" class="btn btn-primary">Xóa</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{else}}
+                    <div class="modal fade" id="exampleModal{{_id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content" style="display: block">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Xóa bình luận</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Bạn không có quyền xóa bình luận này
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                                    </button>
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+            {{/each}}
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-12 col-lg-12 col-xl-12">
+                <form action="/news/addComment" method="post">
+                    <div class="form-group my-3">
+                        <label for="content">Viết bình luận mới</label>
+                        <input type="hidden" name="idNews" value="{{news._id}}"/>
+                        <input type="hidden" name="fullNameUser" value="{{user.FullName}}"/>
+                        <input type="hidden" name="Email" value="{{user.Email}}"/>
+                        <textarea class="form-control" id="content" name="content" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="float: right">Gửi</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

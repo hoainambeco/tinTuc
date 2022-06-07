@@ -1,0 +1,436 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+<script>
+    function editUser(id, fullName, email, password, role) {
+        document.getElementById("UpInputID").value = id;
+        document.getElementById("UpInputFullName").value = fullName;
+        document.getElementById("UpstaticEmail").value = email;
+        if (role.toString() === "Admin") {
+            document.getElementById("UpInputRoles").value = "Admin";
+        } else {
+            document.getElementById("UpInputRoles").value = "User";
+        }
+    }
+
+    function deleteUser(id) {
+        document.getElementById("DpInputID").value = id;
+    }
+
+    function radio() {
+        var r1 = document.getElementsByName("flexRadioDefault1");
+        var r2 = document.getElementsByName("flexRadioDefault2");
+        alert(r1);
+    }
+</script>
+<style>
+
+    body {
+        padding: 0;
+    }
+
+    .gradient-custom {
+        background: #6a11cb;
+        background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+        background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))
+    }
+</style>
+<div class="content">
+    <nav
+            class="navbar navbar-expand-lg navbar-light bg-light"
+            style="opacity: 0.75;"
+    >
+        <div class="container-fluid">
+            <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a
+                                class="nav-link active"
+                                aria-current="page"
+                                href="/news"
+                                style="color: black"
+                        >Admin center</a>
+                    </li>
+                    <li class="nav-item">
+                        <a
+                                class="nav-link active"
+                                aria-current="page"
+                                href="/users"
+                                style="color: black"
+                        >Người dùng</a>
+                    </li>
+                    <li class="nav-item">
+                        <a
+                                class="nav-link active"
+                                href="/news"
+                                style="color: black"
+                        >Tin tức</a>
+                    </li>
+                </ul>
+                <form class="d-flex">
+                    <input
+                            style="margin-top: 5px;"
+                            class="form-control me-2"
+                            type="search"
+                            placeholder="Search"
+                            aria-label="Search"
+                    />
+                    <button class="btn btn-outline-dark my-1 mx-1" type="submit">
+                        Search
+                    </button>
+
+                    <a href="/logout" class="btn btn-outline-dark my-1 mx-1">
+                        Logout
+                    </a>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <div class="row table-responsive table-wrapper-scroll-y my-custom-scrollbar"
+         style="display: contents; overflow: auto; background: #212529">
+
+        {{#if msg}}
+            <div class="alert alert-danger " role="alert">
+                <label class="text-dark">{{msg}}</label>
+            </div>
+        {{/if}}
+        <table class="center table table-dark table-striped table-borderless p-0 table-full-width"
+               style="display: grid;overflow: auto; background: #212529">
+            <tbody style="height: 800px; flex-direction: column; flex-wrap: wrap; margin-left: 600px">
+            <tr>
+                <td>ID</td>
+                <td>Full name</td>
+                <td>Email</td>
+                <td>Role</td>
+                <td>Action</td>
+            </tr>
+            {{#each users}}
+                <tr>
+                    <td>{{this._id}}</td>
+                    <td>{{this.FullName}}</td>
+                    <td>{{this.Email}}</td>
+                    <td>{{this.quyen}}</td>
+                    <td>
+                        <button
+                                type="button"
+                                class="btn btn-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#UpdateModal"
+                                onclick="editUser('{{this._id}}', '{{this.FullName}}', '{{this.Email}}', '{{this.Role}}')"
+                        >
+                            Sửa
+                        </button>
+                        <button
+                                type="button"
+                                class="btn btn-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#DeleteModal"
+                                onclick="deleteUser('{{this._id}}')"
+                        >
+                            Xóa
+                        </button>
+                    </td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+        <div class="row" style="margin: auto;">
+            <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModal"
+            >
+                Thêm người dùng
+            </button>
+        </div>
+        <div
+                class="modal fade"
+                id="exampleModal"
+                tabindex="-1"
+                aria-labelledby="exampleModalLabel"
+                aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <form action="/users/add" method="POST" autocomplete="off">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Thêm User</h5>
+                            <button
+                                    type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"
+                            ></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="col-auto">
+                                <div class="mb-3 row">
+                                    <label
+                                            for="InputFullName"
+                                            class="col-sm-2 col-form-label"
+                                    >FullName:</label>
+                                    <div class="col-sm-10">
+                                        <input
+                                                name="FullName"
+                                                type="text"
+                                                class="form-control text-dark"
+                                                id="InputFullName"
+                                                placeholder="FullName"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label
+                                            for="staticEmail"
+                                            class="col-sm-2 col-form-label"
+                                    >Email</label>
+                                    <div class="col-sm-10">
+                                        <input
+                                                name="Email"
+                                                type="text"
+                                                class="form-control text-dark"
+                                                id="staticEmail"
+                                                placeholder="email@example.com"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label
+                                            for="staticPassword"
+                                            class="col-sm-2 col-form-label"
+                                    >Password</label>
+                                    <div class="col-sm-10">
+                                        <input
+                                                name="Password"
+                                                type="password"
+                                                class="form-control text-dark"
+                                                id="staticPassword"
+                                                placeholder="password"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <p class="col-sm-2 col-form-label">role</p>
+                                    <div class="col-sm-10">
+                                        <div class="form-check">
+                                            <input
+                                                    class="form-check-input"
+                                                    type="radio"
+                                                    name="flexRadioDefault1"
+                                                    id="flexRadioDefault1"
+                                                    value="Admin"
+                                            />
+                                            <label class="form-check-label" for="flexRadioDefault1">
+                                                Admin
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input
+                                                    class="form-check-input"
+                                                    type="radio"
+                                                    name="flexRadioDefault1"
+                                                    id="flexRadioDefault2"
+                                                    value="User"
+                                                    checked
+                                            />
+                                            <label class="form-check-label" for="flexRadioDefault2">
+                                                User
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button
+                                    type="button"
+                                    class="btn btn-secondary"
+                                    data-bs-dismiss="modal"
+                            >Close
+                            </button>
+                            <button
+                                    type="submit"
+                                    class="btn btn-primary">
+                                Save changes
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div
+                class="modal fade"
+                id="UpdateModal"
+                tabindex="-1"
+                aria-labelledby="exampleModalLabel"
+                aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <form action="/users/edit" method="POST" autocomplete="off">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Sửa User</h5>
+                            <button
+                                    type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"
+                            ></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="col-auto">
+                                <div class="mb-3 row">
+                                    <label for="UpInputID" class="col-sm-2 col-form-label">ID:</label>
+                                    <div class="col-sm-10">
+                                        <input
+                                                name="UpInputID"
+                                                type="text"
+                                                class="form-control text-dark"
+                                                id="UpInputID"
+                                                placeholder="ID"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label
+                                            for="UpInputFullName"
+                                            class="col-sm-2 col-form-label"
+                                    >FullName:</label>
+                                    <div class="col-sm-10">
+                                        <input
+                                                name="UpInputFullName"
+                                                type="text"
+                                                class="form-control text-dark"
+                                                id="UpInputFullName"
+                                                placeholder="FullName"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label
+                                            for="UpstaticEmail"
+                                            class="col-sm-2 col-form-label"
+                                    >Email</label>
+                                    <div class="col-sm-10">
+                                        <input
+                                                name="UpInputEmail"
+                                                type="text"
+                                                class="form-control text-dark"
+                                                id="UpstaticEmail"
+                                                placeholder="email@example.com"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label
+                                            for="UpInputPassword"
+                                            class="col-sm-2 col-form-label"
+                                    >Password</label>
+                                    <div class="col-sm-10">
+                                        <input
+                                                name="UpInputPassword"
+                                                type="password"
+                                                class="form-control text-dark"
+                                                id="UpInputPassword"
+                                                placeholder="password"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label class="col-sm-2 col-form-label">role</label>
+                                    <div class="col-sm-9">
+                                        <label>
+                                            <select id="UpInputRoles" name="UpInputRole">
+                                                <option value="Admin">Admin</option>
+                                                <option value="User">User</option>
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button
+                                    type="button"
+                                    class="btn btn-secondary"
+                                    data-bs-dismiss="modal"
+                            >Close
+                            </button>
+                            <button
+                                    type="submit"
+                                    class="btn btn-primary">
+                                Save changes
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Modal Delete-->
+        <div
+                class="modal fade"
+                id="DeleteModal"
+                tabindex="-1"
+                aria-labelledby="exampleModalLabel"
+                aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <form action="/users/delete" method="POST" autocomplete="off">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Xóa User</h5>
+                            <button
+                                    type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"
+                            ></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="col-auto">
+                                <div class="mb-3 row">
+                                    <label for="DpInputID" class="col-sm-2 col-form-label">ID:</label>
+                                    <div class="col-sm-10">
+                                        <input
+                                                name="DpInputID"
+                                                type="text"
+                                                class="form-control text-dark"
+                                                id="DpInputID"
+                                                placeholder="ID"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button
+                                            type="button"
+                                            class="btn btn-secondary"
+                                            data-bs-dismiss="modal"
+                                    >No
+                                    </button>
+                                    <button
+                                            type="submit"
+                                            class="btn btn-primary"
+                                            data-bs-dismiss="modal"
+                                    >Yes
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
