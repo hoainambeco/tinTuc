@@ -62,35 +62,44 @@
 </div>
 <div>
     <div class="container" style="background: #fefefe;border-radius: 20px; margin-top: 10px">
-        <h1>Bình luận</h1>
+        <h1 style="margin-bottom: 30px">Bình luận</h1>
         <div class="row">
-            {{#each comments}}
-                <div class="col-12 col-md-12 col-lg-12 col-xl-12">
-                    <div class="card-deck">
-                        <div class="card mt-3" style="border-radius: unset;border: unset;display: block">
-                            <div class="card-body" style="border-radius: 20px; border: 1px black solid">
-                                <button
-                                        type="button"
-                                        class="btn-close float-end"
-                                        aria-label="Close"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal{{_id}}"></button>
-                                <input type="hidden" name="idComment" value="{{_id}}"/>
-                                <h5 class="card-title">{{fullNameUser}}</h5>
-                                <p style="font-size: 13px; color: #9a9999">{{Email}}</p>
-                                <p class="card-text">{{content}}</p>
-                                <p>{{date}}</p>
+            {{#if DeleteComment}}
+                <div class="card-header alert-danger col-12 col-md-12 col-lg-12 col-xl-12"
+                     style="height: 50px; border-radius: 20px 20px 0 0">
+                    <p class="card-text">Bạn không có quyền xóa bình luận của người khác</p>
+                </div>
+            {{/if}}
+            <div style="margin-top: -30px;padding: 0;">
+                {{#each comments}}
+                    <div class="col-12 col-md-12 col-lg-12 col-xl-12" style="padding: 0;" >
+                        <div class="card-deck">
+                            <div class="card mt-3" style="border-radius: 20px;border: 20px;display: block; ">
+                                <div class="card-body"
+                                     style="border-radius: 20px; border: 1px black solid; background-color: white">
+                                    <button
+                                            type="button"
+                                            class="btn-close float-end"
+                                            aria-label="Close"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#exampleModal{{_id}}"></button>
+                                    <input type="hidden" name="idComment" value="{{_id}}"/>
+                                    <h5 class="card-title">{{fullNameUser}}</h5>
+                                    <p style="font-size: 13px; color: #9a9999">{{Email}}</p>
+                                    <p class="card-text">{{content}}</p>
+                                    <p>{{date}}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                {{#if modelDeleteComment}}
-                    <div class="modal fade" id="exampleModal{{_id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="exampleModal{{_id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content" style="display: block">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel">Xóa bình luận</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     Bình luận xóa đi sẽ không thể khôi phục lại được. Bạn vẫn muốn xóa chứ
@@ -106,30 +115,8 @@
                             </div>
                         </div>
                     </div>
-                {{else}}
-                    <div class="modal fade" id="exampleModal{{_id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content" style="display: block">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Xóa bình luận</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    Bạn không có quyền xóa bình luận này
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
-                                    </button>
-                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {{/if}}
-            {{/each}}
+                {{/each}}
+            </div>
         </div>
         <div class="row">
             <div class="col-12 col-md-12 col-lg-12 col-xl-12">
